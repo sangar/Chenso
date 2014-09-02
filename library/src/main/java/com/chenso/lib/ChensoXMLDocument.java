@@ -86,21 +86,19 @@ public class ChensoXMLDocument {
 			attrName = "";
 		}
 		
-		String retval = "";
-		
-		for (int count = 0; count < nodeList.getLength(); count++) {
-	    	Node tempNode = nodeList.item(count);
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node tempNode = nodeList.item(i);
 	    	if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
-		 		// get node name and value
-				if (nodeName.equalsIgnoreCase(tempNode.getNodeName())) {
-					return tempNode.getTextContent();
-				}
+	    		// get node name and value
+	    		if (nodeName.equalsIgnoreCase(tempNode.getNodeName())) {
+	    			return tempNode.getTextContent();
+	    		}
 				
 				if (tempNode.hasAttributes()) {
 		 			// get attributes names and values
 					NamedNodeMap nodeMap = tempNode.getAttributes();
-		 			for (int i = 0; i < nodeMap.getLength(); i++) {
-						Node node = nodeMap.item(i);
+		 			for (int j = 0; j < nodeMap.getLength(); j++) {
+		 				Node node = nodeMap.item(j);
 						if (attrName.equalsIgnoreCase(node.getNodeName())) {
 							return node.getNodeValue();
 						}
@@ -108,13 +106,12 @@ public class ChensoXMLDocument {
 				}
 		 
 				if (tempNode.hasChildNodes()) {
-					// loop again if has child nodes
-					retval = valueForNodeInNodes(nodeName, attrName, tempNode.getChildNodes());
+					return valueForNodeInNodes(nodeName, attrName, tempNode.getChildNodes());
 				}
 			}
 	    }
 		
-		return retval;
+		return "";
 	}
 	
 	private String firstValueForNodeInDocument(String nodeName, Document doc) {
