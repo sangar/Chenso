@@ -1,0 +1,18 @@
+apply plugin: 'java'
+
+repositories {
+	mavenCentral()
+}
+
+// Compile dependencies
+dependencies {
+  testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+// Include compiles dependencies and set jar name and version
+jar {
+  from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+
+  baseName = 'Chenso'
+  version =  '0.0.1'
+}
