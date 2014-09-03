@@ -99,12 +99,6 @@ public class ChensoXMLDocument {
 			return xmlNode;
 		}
 
-		public List<ChensoXMLElement> getChildren() {
-			List<Integer> indexes = range(0, 0xffff);
-			
-			return getChildrenAtIndexes(indexes);
-		}
-
 		/**
 		 Generates an integer list generator which is used to generate acceptable response codes.
 		 
@@ -121,6 +115,12 @@ public class ChensoXMLDocument {
 			}
 			
 			return range;
+		}
+
+		public List<ChensoXMLElement> getChildren() {
+			List<Integer> indexes = range(0, 0xffff);
+			
+			return getChildrenAtIndexes(indexes);
 		}
 
 		public List<ChensoXMLElement> getChildrenAtIndexes(List<Integer> indexes) {
