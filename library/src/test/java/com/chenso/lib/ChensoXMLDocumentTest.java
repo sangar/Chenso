@@ -12,16 +12,17 @@ public class ChensoXMLDocumentTest {
 	public void testFirstValueForNodeName() {
 		ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlString);
 
-		assertEquals("Tove", document.firstValueForNodeName("to"));
-		assertEquals("Jani", document.firstValueForNodeName("from"));
-		assertEquals("Reminder", document.firstValueForNodeName("heading"));
-		assertEquals("Don't forget me this weekend!", document.firstValueForNodeName("body"));
+		
+		assertEquals("Tove", document.getRootElement().firstValueForNodeName("to"));
+		assertEquals("Jani", document.getRootElement().firstValueForNodeName("from"));
+		assertEquals("Reminder", document.getRootElement().firstValueForNodeName("heading"));
+		assertEquals("Don't forget me this weekend!", document.getRootElement().firstValueForNodeName("body"));
 	}
 
 	@Test
 	public void testFirstValueForAttributeName() {
 		ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlString);
 
-		assertEquals("firstname", document.firstValueForAttributeName("type"));
+		assertEquals("firstname", document.getRootElement().firstValueForAttributeName("type"));
 	}
 }

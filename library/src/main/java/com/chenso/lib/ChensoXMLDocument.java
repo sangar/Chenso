@@ -1,6 +1,10 @@
 package com.chenso.lib;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,7 +19,7 @@ import org.xml.sax.InputSource;
 public class ChensoXMLDocument {
 	
 	// The XML document to handle
-	private Document doc;
+	private Document document;
 
 	//
 	// Static constructors
@@ -28,7 +32,7 @@ public class ChensoXMLDocument {
 	public static ChensoXMLDocument XMLDocumentWithXMLString(String xmlString) {
 		return new ChensoXMLDocument(xmlString);
 	}
-	
+
 	public static ChensoXMLDocument XMLDocumentWithDocument(Document doc) {
 		return new ChensoXMLDocument(doc);
 	}
@@ -36,12 +40,12 @@ public class ChensoXMLDocument {
 	//
 	// Constructors 
 	//
-	
-	public ChensoXMLDocument(Document doc) {
-		if (doc == null) {
+
+	public ChensoXMLDocument(Document document) {
+		if (this.document == null) {
 			throw new NullPointerException("Document cannot be null");
 		}
-		this.doc = doc;
+		this.document = document;
 	}
 	
 	public ChensoXMLDocument(byte[] data) {
@@ -56,82 +60,121 @@ public class ChensoXMLDocument {
 			document = builder.parse(new InputSource(new StringReader(xmlString)));
 			document.getDocumentElement().normalize();
 			
-			this.doc = document;
+			this.document = document;
 		} catch (Exception e) {
 			throw new NullPointerException("Document cannot be null");
 		}
 	}
 	
-	//
-	// Public methods
-	//
-	
-	public String firstValueForNodeName(String nodeName) {
-		return firstValueForNodeInDocument(nodeName, this.doc);
-	}
-	
-	public String firstValueForAttributeName(String attrName) {
-		return firstValueForAttributeInDocument(attrName, this.doc);
-	}
-	
-	//
-	// Private methods
-	//
-	
-	private static String valueForNodeInNodes(String nodeName, String attrName, NodeList nodeList) {
-		if (nodeName == null) {
-			nodeName = "";
+	public ChensoXMLElement getRootElement() {
+		if (this.rootElement == null) {
+			this.rootElement = elementWithNode(this.document.getDocumentElement());
 		}
-		if (attrName == null) {
-			attrName = "";
+		return this.rootElement;
+	}
+	
+	public ChensoXMLElement elementWithNode(Node node) {
+		if (node == null) {
+			return null;
+		}
+		return new ChensoXMLElement(this, node);
+	}
+	
+	//
+	// ChensoXMLElement
+	//
+	
+	private ChensoXMLElement rootElement;
+
+	public class ChensoXMLElement {
+		private ChensoXMLDocument document;
+		private Node xmlNode;
+
+		public ChensoXMLElement(ChensoXMLDocument document, Node xmlNode) {
+			this.document = document;
+			this.xmlNode = xmlNode;
+		}
+
+		public Node getXMLNode() {
+			return xmlNode;
+		}
+
+		public List<ChensoXMLElement> getChildren() {
+			List<Integer> indexes = range(0, 0xffff);
+			
+			return getChildrenAtIndexes(indexes);
+		}
+
+		/**
+		 Generates an integer list generator which is used to generate acceptable response codes.
+		 
+		 The list generated starts at the {@param start} value and stops at value {@param stop} - 1.
+		 
+		 @param start Start integer of the list of integers.
+		 @param stop Stop integer, stops at value - 1. If 300 is given, stop value is 299.
+		 */
+		public List<Integer> range(int start, int stop) {
+			List<Integer> range = new ArrayList<Integer>(stop-start);
+			
+			for (int i=0; i< stop-start; i++) {
+				range.add(i, start+i);
+			}
+			
+			return range;
+		}
+
+		public List<ChensoXMLElement> getChildrenAtIndexes(List<Integer> indexes) {
+			List<ChensoXMLElement> children = new ArrayList<ChensoXMLDocument.ChensoXMLElement>();
+			
+			NodeList nodes = this.xmlNode.getChildNodes();
+			for (Integer i=0; i<nodes.getLength(); i++) {
+				Node node = nodes.item(i);
+			
+				if (indexes.contains(i) && node.getNodeType() == Node.ELEMENT_NODE) {
+					children.add(elementWithNode(node));
+				}
+			}
+			return children;
 		}
 		
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			Node tempNode = nodeList.item(i);
-	    	if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
-	    		// get node name and value
-	    		if (nodeName.equalsIgnoreCase(tempNode.getNodeName())) {
-	    			return tempNode.getTextContent();
-	    		}
-				
-				if (tempNode.hasAttributes()) {
-		 			// get attributes names and values
-					NamedNodeMap nodeMap = tempNode.getAttributes();
-		 			for (int j = 0; j < nodeMap.getLength(); j++) {
-		 				Node node = nodeMap.item(j);
-						if (attrName.equalsIgnoreCase(node.getNodeName())) {
-							return node.getNodeValue();
+		public String firstValueForNodeName(String nodeName) {
+			return valueForNodeInNodes(nodeName, null, this.xmlNode.getChildNodes());
+		}
+		
+		public String firstValueForAttributeName(String attrName) {
+			return valueForNodeInNodes(null, attrName, this.xmlNode.getChildNodes());
+		}
+		
+		private String valueForNodeInNodes(String nodeName, String attrName, NodeList nodeList) {
+			if (nodeName == null) {
+				nodeName = "";
+			}
+			if (attrName == null) {
+				attrName = "";
+			}
+			
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node tempNode = nodeList.item(i);
+		    	if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
+		    		// get node name and value
+		    		if (nodeName.equalsIgnoreCase(tempNode.getNodeName())) {
+		    			return tempNode.getTextContent();
+		    		}
+					
+					if (tempNode.hasAttributes()) {
+			 			// get attributes names and values
+						NamedNodeMap nodeMap = tempNode.getAttributes();
+			 			for (int j = 0; j < nodeMap.getLength(); j++) {
+			 				Node node = nodeMap.item(j);
+							if (attrName.equalsIgnoreCase(node.getNodeName())) {
+								return node.getNodeValue();
+							}
 						}
 					}
 				}
-		 
-				if (tempNode.hasChildNodes()) {
-					return valueForNodeInNodes(nodeName, attrName, tempNode.getChildNodes());
-				}
-			}
-	    }
-		
-		return "";
-	}
-	
-	private String firstValueForNodeInDocument(String nodeName, Document doc) {
-		String retval = "";
-		
-		if (doc.hasChildNodes()) {
-			retval = valueForNodeInNodes(nodeName, null, doc.getChildNodes());
+		    }
+			
+			return "";
 		}
-		
-		return retval;
 	}
-	
-	private String firstValueForAttributeInDocument(String attrName, Document doc) {
-		String retval = "";
-		
-		if (doc.hasChildNodes()) {
-			retval = valueForNodeInNodes(null, attrName, doc.getChildNodes());
-		}
-		
-		return retval;
-	}
-	
 }
