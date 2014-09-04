@@ -42,7 +42,7 @@ public class ChensoXMLDocument {
 	//
 
 	public ChensoXMLDocument(Document document) {
-		if (this.document == null) {
+		if (document == null) {
 			throw new NullPointerException("Document cannot be null");
 		}
 		this.document = document;
