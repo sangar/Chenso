@@ -14,6 +14,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.chenso.lib.ChensoXMLDocument.ChensoXMLElement;
+
 public class ChensoXMLDocumentTest {
 
 	private final String xmlString = "<note><to type=\"firstname\">Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
@@ -21,11 +23,12 @@ public class ChensoXMLDocumentTest {
 	@Test
 	public void testFirstValueForNodeName() {
 		ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlString);
+		ChensoXMLElement rootElement = document.getRootElement();
 		
-		assertEquals("Tove", document.getRootElement().firstValueForNodeName("to"));
-		assertEquals("Jani", document.getRootElement().firstValueForNodeName("from"));
-		assertEquals("Reminder", document.getRootElement().firstValueForNodeName("heading"));
-		assertEquals("Don't forget me this weekend!", document.getRootElement().firstValueForNodeName("body"));
+		assertEquals("Tove", rootElement.firstValueForNodeName("to"));
+		assertEquals("Jani", rootElement.firstValueForNodeName("from"));
+		assertEquals("Reminder", rootElement.firstValueForNodeName("heading"));
+		assertEquals("Don't forget me this weekend!", rootElement.firstValueForNodeName("body"));
 	}
 
 	@Test
@@ -42,17 +45,19 @@ public class ChensoXMLDocumentTest {
 		assertNotNull(doc);
 		
 		ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithDocument(doc);
+		ChensoXMLElement rootElement = document.getRootElement();
 		
-		assertEquals("Tove", document.getRootElement().firstValueForNodeName("to"));
-		assertEquals("Jani", document.getRootElement().firstValueForNodeName("from"));
-		assertEquals("Reminder", document.getRootElement().firstValueForNodeName("heading"));
-		assertEquals("Don't forget me this weekend!", document.getRootElement().firstValueForNodeName("body"));
+		assertEquals("Tove", rootElement.firstValueForNodeName("to"));
+		assertEquals("Jani", rootElement.firstValueForNodeName("from"));
+		assertEquals("Reminder", rootElement.firstValueForNodeName("heading"));
+		assertEquals("Don't forget me this weekend!", rootElement.firstValueForNodeName("body"));
 	}
 	
 	@Test
 	public void testFirstValueForAttributeName() {
 		ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlString);
+		ChensoXMLElement rootElement = document.getRootElement();
 
-		assertEquals("firstname", document.getRootElement().firstValueForAttributeName("type"));
+		assertEquals("firstname", rootElement.firstValueForAttributeName("type"));
 	}
 }
