@@ -18,3 +18,7 @@ String reminder = rootElement.firstValueForNodeName("heading");
 String body = rootElement.firstValueForNodeName("body");
 
 ```
+
+## Credits
+
+Chenso is based upon the iOS & Mac OS X library Ono (https://github.com/mattt/Ono)
