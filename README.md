@@ -5,6 +5,32 @@ Chenso
 
 Chenso is a org.w3c.dom XML wrapper/parser library.
 
+## Basic usage
+
+### Run tests
+
+##### Windows
+```cmd
+gradlew.bat test
+```
+
+##### Unix
+```bash
+./gradlew test
+```
+
+### Build
+
+##### Windows
+```cmd
+gradlew.bat build
+```
+
+##### Unix
+```bash
+./gradlew build
+```
+
 ### Usage
 
 ```java
@@ -23,4 +49,4 @@ String body = rootElement.firstValueForNodeName("body");
 
 ## Credits
 
-Chenso is based upon the iOS & Mac OS X library Ono (https://github.com/mattt/Ono)
+Chenso is based on an iOS & Mac OS X library called - [Ono](https://github.com/mattt/Ono).
