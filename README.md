@@ -1,6 +1,8 @@
 Chenso
 ======
 
+[![Build Status](https://travis-ci.org/sangar/Chenso.svg?branch=master)](https://travis-ci.org/sangar/Chenso)
+
 Chenso is a org.w3c.dom XML wrapper/parser library.
 
 ### Usage
