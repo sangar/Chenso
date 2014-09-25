@@ -1,7 +1,7 @@
 Chenso
 ======
 
-[![Build Status](https://travis-ci.org/sangar/Chenso.svg?branch=master)](https://travis-ci.org/sangar/Chenso)
+[![Build Status](https://travis-ci.org/sangar/Chenso.svg?branch=master)](https://travis-ci.org/sangar/Chenso) [![Platform](http://img.shields.io/badge/platform-java%7Candroid-lightgrey.svg)](https://github.com/JavaNetworking/JavaNetworking) [![License](http://img.shields.io/badge/license-MIT-red.svg)](http://opensource.org/licenses/MIT)
 
 Chenso is a org.w3c.dom XML wrapper/parser library.
 
