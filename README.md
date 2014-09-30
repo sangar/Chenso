@@ -47,6 +47,21 @@ String body = rootElement.firstValueForNodeName("body");
 
 ```
 
+```java
+String xmlString = "<notes><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note><note><to>Jani</to><from>Tove</from><heading>Reminder</heading><body>Don't forget me either!</body></note></notes>";
+
+ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlString);
+List<ChensoXMLElement> elements = document.getRootElement().getChildren();
+
+for (ChensoXMLElement element : elements) {
+	String to = element.firstValueForNodeName("to");
+	String from = element.firstValueForNodeName("from");
+	String reminder = element.firstValueForNodeName("heading");
+	String body = element.firstValueForNodeName("body");
+}
+
+```
+
 ## Credits
 
 Chenso is based on an iOS & Mac OS X library called - [Ono](https://github.com/mattt/Ono).
