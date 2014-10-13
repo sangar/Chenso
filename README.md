@@ -56,7 +56,7 @@ List<ChensoXMLElement> elements = document.getRootElement().getChildren();
 for (ChensoXMLElement element : elements) {
 	String to = element.firstValueForNodeName("to");
 	String from = element.firstValueForNodeName("from");
-	String reminder = element.firstValueForNodeName("heading");
+	String heading = element.firstValueForNodeName("heading");
 	String body = element.firstValueForNodeName("body");
 }
 
