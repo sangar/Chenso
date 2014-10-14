@@ -68,7 +68,7 @@ String xmlString = "<notes><note><to>Tove</to><from>Jani</from><heading>Reminder
 
 ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlString);
 
-document.enumerateElementsWithXPath("//book", new XPathCallback() {
+document.enumerateElementsWithXPath("//note", new XPathCallback() {
 	public void update(ChensoXMLElement element, int index) {
 		String to = element.firstValueForNodeName("to");
 		String from = element.firstValueForNodeName("from");
