@@ -33,8 +33,8 @@ gradlew.bat build
 
 ### Usage
 
+#### Get first value for name in XML element
 ```java
-
 String xmlString = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
 
 ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlString);
@@ -47,6 +47,7 @@ String body = rootElement.firstValueForNodeName("body");
 
 ```
 
+#### Get list of XML elements in document
 ```java
 String xmlString = "<notes><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note><note><to>Jani</to><from>Tove</from><heading>Reminder</heading><body>Don't forget me either!</body></note></notes>";
 
@@ -59,7 +60,24 @@ for (ChensoXMLElement element : elements) {
 	String heading = element.firstValueForNodeName("heading");
 	String body = element.firstValueForNodeName("body");
 }
+```
 
+#### Iterate through document using XPath
+```java
+String xmlString = "<notes><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note><note><to>Jani</to><from>Tove</from><heading>Reminder</heading><body>Don't forget me either!</body></note></notes>";
+
+ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlString);
+
+document.enumerateElementsWithXPath("//book", new XPathCallback() {
+	public void update(ChensoXMLElement element, int index) {
+		String to = element.firstValueForNodeName("to");
+		String from = element.firstValueForNodeName("from");
+		String heading = element.firstValueForNodeName("heading");
+		String body = element.firstValueForNodeName("body");
+
+		...
+	}
+});
 ```
 
 ## Credits
