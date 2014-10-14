@@ -8,6 +8,9 @@ import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -79,7 +82,44 @@ public class ChensoXMLDocument {
 		}
 		return new ChensoXMLElement(this, node);
 	}
-	
+
+	public interface XPathCallback {
+		void update(ChensoXMLElement element, int index);
+	}
+
+	public void enumerateElementsWithXPath(String XPath, XPathCallback callback) {
+		if (callback == null) {
+			return;
+		}
+		
+		int index = 0;
+		for (ChensoXMLElement element : this.XPath(XPath)) {
+			callback.update(element, index++);
+		}
+	}
+
+	public List<ChensoXMLElement> XPath(String XPath) {
+		if (XPath.isEmpty()) {
+			return null;
+		}
+		
+		
+		List<ChensoXMLElement> elements = new ArrayList<ChensoXMLDocument.ChensoXMLElement>();
+		javax.xml.xpath.XPath xPath = XPathFactory.newInstance().newXPath();
+		NodeList nodes = null;
+		try {
+			nodes = (NodeList)xPath.evaluate(XPath, this.document.getDocumentElement(), XPathConstants.NODESET);
+			
+			for (int i = 0; i < nodes.getLength(); ++i) {
+			    elements.add(this.elementWithNode(nodes.item(i)));
+			}
+			
+			return elements;
+		} catch (XPathExpressionException e) {}
+		
+		return null;
+	}
+
 	//
 	// ChensoXMLElement
 	//
