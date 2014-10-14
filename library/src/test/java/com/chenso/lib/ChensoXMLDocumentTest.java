@@ -16,6 +16,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.chenso.lib.ChensoXMLDocument.ChensoXMLElement;
+import com.chenso.lib.ChensoXMLDocument.XPathCallback;
 
 public class ChensoXMLDocumentTest {
 
@@ -82,5 +83,45 @@ public class ChensoXMLDocumentTest {
 			assertNotNull(reminder);
 			assertNotNull(body);
 		}
+	}
+
+	@Test
+	public void testEnumerateElementsWithXPath() {
+		ChensoXMLDocument document = ChensoXMLDocument.XMLDocumentWithXMLString(xmlElements);
+
+		document.enumerateElementsWithXPath("//note", new XPathCallback() {
+			public void update(ChensoXMLElement element, int index) {
+				String to = element.firstValueForNodeName("to");
+				String from = element.firstValueForNodeName("from");
+				String heading = element.firstValueForNodeName("heading");
+				String body = element.firstValueForNodeName("body");
+
+				assertNotNull(to);
+				assertNotNull(from);
+				assertNotNull(heading);
+				assertNotNull(body);
+
+				switch (index) {
+					case 0:
+						//<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>
+
+						assertEquals("Tove", to);
+						assertEquals("Jani", from);
+						assertEquals("Reminder", heading);
+						assertEquals("Don't forget me this weekend!", body);
+
+						break;
+					case 1:
+						//<note><to>Jani</to><from>Tove</from><heading>Reminder</heading><body>Don't forget me either!</body></note>
+
+						assertEquals("Jani", to);
+						assertEquals("Tove", from);
+						assertEquals("Reminder", heading);
+						assertEquals("Don't forget me either!", body);
+
+						break;
+				}
+			}
+		});
 	}
 }
